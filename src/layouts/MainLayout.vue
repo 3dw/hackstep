@@ -1,48 +1,17 @@
-<template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+<template lang="pug">
+q-layout(view="lHh Lpr lFf")
+  q-header(elevated)
+    q-toolbar
+      q-btn(flat, dense, round, icon="menu", aria-label="Menu", @click="toggleLeftDrawer")
+      q-btn(@click="editStep" flat round icon="edit" aria-label="Edit Step")
+      q-btn(@click="copyLink" flat round icon="link" aria-label="Copy Link")
+  q-drawer(v-model="leftDrawerOpen", show-if-above, bordered)
+    q-list
+      q-item-label(header) Essential Links
+      EssentialLink(v-for="link in essentialLinks", :key="link.title", v-bind="link")
+  q-page-container
+    router-view
 
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
-      </q-toolbar>
-    </q-header>
-
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
-
-    <q-page-container>
-      <router-view />
-    </q-page-container>
-  </q-layout>
 </template>
 
 <script lang="ts">
@@ -105,11 +74,30 @@ export default defineComponent({
     const leftDrawerOpen = ref(false)
 
     return {
+      hash: ref(window.location.hash || ''),
       essentialLinks: linksList,
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       }
+    }
+  },
+  methods: {
+    copyLink () {
+      if (!document.hasFocus()) {
+        alert('Document does not have focus, cannot copy text.');
+        return;
+      }
+      console.log(this.hash);
+      const copyText = 'https://bestian.github.io/hackstep/#/' + this.hash;
+      navigator.clipboard.writeText(copyText)
+        .then(() => {
+          window.alert('Copied the text: ' + copyText);
+        })
+        .catch(err => {
+          console.error('Could not copy text: ', err);
+        });
+      this.$forceUpdate();
     }
   }
 });
