@@ -1,49 +1,53 @@
-<template>
-  <q-page class="row items-center justify-evenly">
-    <example-component
-      title="Example component"
-      active
-      :todos="todos"
-      :meta="meta"
-    ></example-component>
-  </q-page>
+<template lang = "pug">
+q-page.row.items-center.justify-evenly
+  draggable(class="dragArea list-group w-full",
+        :list="steps || []", @change="onChange")
+    .item(v-for="(s, idx) in steps", :key="idx") {{ s.name }}
+
+
 </template>
 
 <script lang="ts">
-import { Todo, Meta } from 'components/models';
-import ExampleComponent from 'components/ExampleComponent.vue';
 import { defineComponent, ref } from 'vue';
+import { VueDraggableNext } from 'vue-draggable-next';
 
 export default defineComponent({
-  name: 'IndexPage',
-  components: { ExampleComponent },
+  name: 'EdiTor',
+  components: {
+    draggable: VueDraggableNext
+  },
   setup () {
-    const todos = ref<Todo[]>([
-      {
-        id: 1,
-        content: 'ct1'
-      },
-      {
-        id: 2,
-        content: 'ct2'
-      },
-      {
-        id: 3,
-        content: 'ct3'
-      },
-      {
-        id: 4,
-        content: 'ct4'
-      },
-      {
-        id: 5,
-        content: 'ct5'
-      }
-    ]);
-    const meta = ref<Meta>({
-      totalCount: 1200
-    });
-    return { todos, meta };
+    var steps = ref([
+      { name: "John", id: 0 },
+      { name: "Joao", id: 1 },
+      { name: "Jean", id: 2 }
+    ])
+    const dragging = ref(false)
+    return { steps, dragging };
+  },
+  mounted () {
+    this.dragging = false;
+    console.log(this.$route.params.steps.split(/%20|\s/))
+    if (this.$route.params.steps.split(/%20|\s/) && this.$route.params.steps.split(/%20|\s/).length > 1) {
+      this.steps = this.$route.params.steps.split(/%20|\s/).map((s, idx) => ({ name: s, id: idx }));
+    }
+  },  
+  methods: {
+    onChange(e) {
+      console.log(e)
+      /* var ss = [...this.steps];
+      const oldIndex = e.moved.oldIndex; console.log(oldIndex)
+      const newIndex = e.moved.newIndex; console.log(newIndex)
+
+      ss[oldIndex] = {...this.steps[newIndex]};
+      ss[newIndex] = {...this.steps[oldIndex]};
+
+      this.steps = [...ss];  */
+
+      console.log(this.steps)
+      this.dragging = false;
+      // this.$emit('update_steps', this.steps);
+    }
   }
 });
 </script>
