@@ -18,9 +18,9 @@ export default defineComponent({
   },
   setup () {
     var steps = ref([
-      { name: "John", id: 0 },
-      { name: "Joao", id: 1 },
-      { name: "Jean", id: 2 }
+      { name: 'John', id: 0 },
+      { name: 'Joao', id: 1 },
+      { name: 'Jean', id: 2 }
     ])
     const dragging = ref(false)
     return { steps, dragging };
