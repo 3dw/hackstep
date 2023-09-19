@@ -1,49 +1,38 @@
-<template>
-  <q-page class="row items-center justify-evenly">
-    <example-component
-      title="Example component"
-      active
-      :todos="todos"
-      :meta="meta"
-    ></example-component>
-  </q-page>
+<template lang="pug">
+q-page.index(padding="")
+  .row
+    h1 關於Hackstep
+  .row
+    .col-xs-6.col-sm-4.col-md-3.padded
+      q-img(class="fluid" style="border-radius: 15px;" src="../assets/climb.png")
+    .col-xs-6.col-sm-8.col-md-9.padded
+      h6(v-for="(text, k) in parseMarkdownToSteps(intro).intros" :key="k") {{text}}
+      div(v-for="(step, t) in parseMarkdownToSteps(intro).steps", :key="t")
+        p(v-if="!step.r") {{step.n}}
+        p(v-else)
+          router-link(:to ="step.r", target="_blank", rel="noopener noreferrer") {{step.n}}
 </template>
 
 <script lang="ts">
-import { Todo, Meta } from 'components/models';
-import ExampleComponent from 'components/ExampleComponent.vue';
+import { parseMarkdownToSteps } from 'edu-lang';
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'IndexPage',
-  components: { ExampleComponent },
   setup () {
-    const todos = ref<Todo[]>([
-      {
-        id: 1,
-        content: 'ct1'
-      },
-      {
-        id: 2,
-        content: 'ct2'
-      },
-      {
-        id: 3,
-        content: 'ct3'
-      },
-      {
-        id: 4,
-        content: 'ct4'
-      },
-      {
-        id: 5,
-        content: 'ct5'
-      }
-    ]);
-    const meta = ref<Meta>({
-      totalCount: 1200
-    });
-    return { todos, meta };
+    const intro = ref(`
+    Hackstep 是一個無邊界知識分享器。
+    您可以把您的知識排成步驟或者小階梯：
+
+    1. 先確定你有意願分享您的知識
+    2. 請參考[使用說明](!intro)
+    3. 開始分享吧！
+
+    `);
+    return {
+      parseMarkdownToSteps,
+      intro,
+    };
   }
 });
 </script>
