@@ -11,9 +11,9 @@ q-page.index(padding="")
         p(v-if="!step.r") {{step.n}}
         p(v-else)
           router-link(:to ="step.r", target="_blank", rel="noopener noreferrer") {{step.n}}
-  </template>
-  
-  <script lang="ts">
+</template>
+
+<script lang="ts">
   import { parseMarkdownToSteps } from 'edu-lang';
   import { defineComponent, ref } from 'vue';
   
