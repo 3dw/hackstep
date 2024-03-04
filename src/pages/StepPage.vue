@@ -1,53 +1,51 @@
-<template lang = "pug">
+<template lang="pug">
 q-page.row.items-center.justify-evenly
-  draggable(class="dragArea list-group w-full",
-        :list="steps || []", @change="onChange")
-    .item(v-for="(s, idx) in steps", :key="idx") {{ s.name }}
-
+  draggable.dragArea.list-group.w-full(v-model="steps" @change="onChange")
+    .item(v-for="(step, idx) in steps" :key="step.id")
+      // 判斷是否處於編輯狀態，顯示輸入框或者文本
+      template(v-if="step.editing")
+        q-input.filled(v-model="step.name" dense @blur="finishEdit(step)" @keyup.enter="finishEdit(step)")
+      template(v-else)
+        | {{ step.name }}
+        q-btn.icon.small(@click="editStep(step)" icon="edit")
 
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import { VueDraggableNext } from 'vue-draggable-next';
 
 export default defineComponent({
   name: 'EdiTor',
   components: {
-    draggable: VueDraggableNext
+    draggable: VueDraggableNext,
   },
-  setup () {
-    var steps = ref([
-      { name: 'John', id: 0 },
-      { name: 'Joao', id: 1 },
-      { name: 'Jean', id: 2 }
-    ])
-    const dragging = ref(false)
-    return { steps, dragging };
+  setup() {
+    const steps = ref(
+      [
+        { name: 'John', id: 0, editing: false },
+        { name: 'Joao', id: 1, editing: false },
+        { name: 'Jean', id: 2, editing: false }
+      ]
+    );
+
+    const route = useRoute();
+
+    const editStep = (step) => {
+      console.log('start edit!')
+      step.editing = true;
+    };
+
+    const finishEdit = (step) => {
+      console.log('end edit!')
+      step.editing = false;
+      // 可以在這裡添加對step.name的驗證或其他邏輯
+    };
+
+    return { steps, editStep, finishEdit };
   },
-  mounted () {
-    this.dragging = false;
-    console.log(this.$route.params.steps.split(/%20|\s/))
-    if (this.$route.params.steps.split(/%20|\s/) && this.$route.params.steps.split(/%20|\s/).length > 1) {
-      this.steps = this.$route.params.steps.split(/%20|\s/).map((s, idx) => ({ name: s, id: idx }));
-    }
-  },  
-  methods: {
-    onChange(e) {
-      console.log(e)
-      /* var ss = [...this.steps];
-      const oldIndex = e.moved.oldIndex; console.log(oldIndex)
-      const newIndex = e.moved.newIndex; console.log(newIndex)
-
-      ss[oldIndex] = {...this.steps[newIndex]};
-      ss[newIndex] = {...this.steps[oldIndex]};
-
-      this.steps = [...ss];  */
-
-      console.log(this.steps)
-      this.dragging = false;
-      // this.$emit('update_steps', this.steps);
-    }
-  }
 });
 </script>
+
+
