@@ -22,13 +22,13 @@ export default defineComponent({
   setup () {
     const intro = ref(`
     Hackstep 是一個無邊界知識分享器。
-    您可以把您的知識排成步驟或者小階梯：
+    您可以把您的知識排成步驟或者小階梯：`)
 
-    1.請參考[使用說明](!intro)
-    3.請從[範例開始](!edit/標題%201.第一步)
-    4.開始分享吧！
+//    1.請參考[使用說明](!intro)
+//    2.請從[範例開始](!edit/標題%201.第一步)
+//    3.開始分享吧！
 
-    `);
+//    `);
     return {
       parseMarkdownToSteps,
       intro,
