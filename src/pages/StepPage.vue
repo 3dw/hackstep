@@ -8,12 +8,12 @@ q-page.row.items-center.justify-evenly
       template(v-else)
         | {{ step.name }}
         q-btn.icon.small(@click="editStep(step)" icon="edit")
-
+  q-btn(color="green" @click="addNewStep" class="q-ma-md fixed-bottom-right" icon="add" label="Add Step")
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { defineComponent, ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { VueDraggableNext } from 'vue-draggable-next';
 
 export default defineComponent({
@@ -22,30 +22,65 @@ export default defineComponent({
     draggable: VueDraggableNext,
   },
   setup() {
-    const steps = ref(
-      [
-        { name: 'John', id: 0, editing: false },
-        { name: 'Joao', id: 1, editing: false },
-        { name: 'Jean', id: 2, editing: false }
-      ]
-    );
+    const steps = ref([
+      { name: 'Step1', id: 0, editing: false },
+      { name: 'Step2', id: 1, editing: false },
+      { name: 'Step3', id: 2, editing: false },
+    ]);
 
     const route = useRoute();
+    const router = useRouter();
 
     const editStep = (step) => {
-      console.log('start edit!')
+      console.log('start edit!');
       step.editing = true;
     };
 
     const finishEdit = (step) => {
-      console.log('end edit!')
+      console.log('end edit!');
       step.editing = false;
       // 可以在這裡添加對step.name的驗證或其他邏輯
     };
 
-    return { steps, editStep, finishEdit };
+    const addNewStep = () => {
+      const newId = steps.value.length
+        ? Math.max(...steps.value.map((step) => step.id)) + 1
+        : 0;
+      steps.value.push({
+        name:
+          'step' +
+          (steps.value.length
+            ? Math.max(...steps.value.map((step) => step.id)) + 2
+            : 1),
+        id: newId,
+        editing: false,
+      });
+    };
+
+    const onChange = (list) => {
+      console.log(list);
+      const path =
+        '/edit/' +
+        steps.value
+          .map((o) => {
+            return o.name;
+          })
+          .join('%20');
+      router.push(path);
+    };
+
+    onMounted(() => {
+      if (route.params.steps) {
+        const routeSteps = route.params.steps.split(/%20|\s/);
+        steps.value = routeSteps.map((name, idx) => ({
+          id: idx,
+          name,
+          editing: false,
+        }));
+      }
+    });
+
+    return { steps, editStep, finishEdit, addNewStep, onChange };
   },
 });
 </script>
-
-

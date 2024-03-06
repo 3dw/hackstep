@@ -19,20 +19,19 @@ import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'IndexPage',
-  setup () {
+  setup() {
     const intro = ref(`
     Hackstep 是一個無邊界知識分享器。
-    您可以把您的知識排成步驟或者小階梯：`)
-
-//    1.請參考[使用說明](!intro)
-//    2.請從[範例開始](!edit/標題%201.第一步)
-//    3.開始分享吧！
-
-//    `);
+    您可以把您的知識排成步驟或者小階梯：`);
     return {
       parseMarkdownToSteps,
       intro,
     };
-  }
+  },
+  mounted() {
+    // 使用編碼後的URL來處理空格等字符
+    const path = '/edit/step1%20step2%20step3';
+    this.$router.push(path);
+  },
 });
 </script>
