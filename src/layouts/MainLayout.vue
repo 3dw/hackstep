@@ -5,9 +5,9 @@ q-layout(view="lHh Lpr lFf")
     q-toolbar
       // 定義二個按鈕：編輯步驟和複製連結
       // q-btn(flat, dense, round, icon="menu", aria-label="Menu", @click="toggleLeftDrawer")
-      q-btn(@click="editStep" flat round icon="edit" aria-label="Edit Step")
-      q-btn(@click="copyLink" flat round icon="link" aria-label="Copy Link")
-  q-drawer(v-model="leftDrawerOpen", show-if-above, bordered)
+      //q-btn(@click="editStep" flat round icon="edit" aria-label="Edit Step")
+      q-btn(@click="copyLink" flat round icon="ios_share" aria-label="Copy Link" label="Copy Link")
+  //q-drawer(v-model="leftDrawerOpen", show-if-above, bordered)
     q-list
       q-item-label(header) 設定
   q-page-container
@@ -51,11 +51,11 @@ export default defineComponent({
         alert('Document does not have focus, cannot copy text.');
         return;
       }
-      const copyText = 'https://step.bestian.tw/' + this.$route.path;
+      const copyText = 'https://hackstep.pages.dev' + this.$route.path;
       navigator.clipboard
         .writeText(copyText)
         .then(() => {
-          window.alert('Copied the text: ' + copyText);
+          window.alert('Copied the link: ' + copyText);
         })
         .catch((err) => {
           console.error('Could not copy text: ', err);

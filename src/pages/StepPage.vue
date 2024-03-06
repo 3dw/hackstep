@@ -6,7 +6,7 @@ q-page.row.items-center.justify-evenly
         q-input.filled(:autofocus="true", v-model="step.name" dense :ref="`input-${step.id}`" @blur="finishEdit(step)" @keyup.enter="finishEdit(step)")
       template(v-else)
         | {{ step.name }}
-        q-btn.small(@click="editStep(step, idx)" icon="edit")
+        q-btn.small(@click="editStep(step)" icon="edit")
   .row(fixed-bottom-right)
     q-btn(color="green" @click="addNewStep" class="q-ma-md" icon="add" label="Add Step")
     q-btn(color="red" @click="removeLastStep" class="q-ma-md" icon="add" label="Remove Step")
@@ -32,7 +32,19 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
 
-    const editStep = (step, idx) => {
+
+    const onChange = () => {
+      const path =
+        '/edit/' +
+        steps.value
+          .map((o) => {
+            return o.name;
+          })
+          .join('%20');
+      router.push(path);
+    };
+
+    const editStep = (step) => {
       console.log('start edit!');
       step.editing = true;
       // 確保DOM已更新
@@ -49,6 +61,8 @@ export default defineComponent({
     const finishEdit = (step) => {
       console.log('end edit!');
       step.editing = false;
+
+      onChange()
       // 可以在這裡添加對step.name的驗證或其他邏輯
     };
 
@@ -70,20 +84,10 @@ export default defineComponent({
     const removeLastStep = () => {
       if (steps.value.length > 0) {
         steps.value.pop(); // 移除數組中的最後一個元素
+        onChange()
       }
     };
 
-    const onChange = (list) => {
-      console.log(list);
-      const path =
-        '/edit/' +
-        steps.value
-          .map((o) => {
-            return o.name;
-          })
-          .join('%20');
-      router.push(path);
-    };
 
     onMounted(() => {
       if (route.params.steps) {
