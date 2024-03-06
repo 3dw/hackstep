@@ -1,12 +1,16 @@
 // app global css in SCSS form
 
 .item {
-    cursor: grab;
-    padding: 1.2em;
-    border: 1px solid #ccc;
-    font-size: 18px;
+  cursor: grab;
+  padding: 1.2em;
+  border: 1px solid #ccc;
+  font-size: 18px;
 }
 
 .padded {
-    padding: 1.2em;
+  padding: 1.2em;
+}
+
+.q-btn {
+  margin-left: 1em;
 }

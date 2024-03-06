@@ -2,17 +2,18 @@
 q-page.row.items-center.justify-evenly
   draggable.dragArea.list-group.w-full(v-model="steps" @change="onChange")
     .item(v-for="(step, idx) in steps" :key="step.id")
-      // 判斷是否處於編輯狀態，顯示輸入框或者文本
       template(v-if="step.editing")
-        q-input.filled(v-model="step.name" dense @blur="finishEdit(step)" @keyup.enter="finishEdit(step)")
+        q-input.filled(:autofocus="true", v-model="step.name" dense :ref="`input-${step.id}`" @blur="finishEdit(step)" @keyup.enter="finishEdit(step)")
       template(v-else)
         | {{ step.name }}
-        q-btn.icon.small(@click="editStep(step)" icon="edit")
-  q-btn(color="green" @click="addNewStep" class="q-ma-md fixed-bottom-right" icon="add" label="Add Step")
+        q-btn.small(@click="editStep(step, idx)" icon="edit")
+  .row(fixed-bottom-right)
+    q-btn(color="green" @click="addNewStep" class="q-ma-md" icon="add" label="Add Step")
+    q-btn(color="red" @click="removeLastStep" class="q-ma-md" icon="add" label="Remove Step")
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onMounted, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { VueDraggableNext } from 'vue-draggable-next';
 
@@ -31,9 +32,18 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
 
-    const editStep = (step) => {
+    const editStep = (step, idx) => {
       console.log('start edit!');
       step.editing = true;
+      // 確保DOM已更新
+      nextTick(() => {
+        // 使用動態ref聚焦到對應的輸入框
+        const inputRef = `input-${step.id}`;
+        const inputElement = refs[inputRef];
+        if (inputElement && inputElement.$el) {
+          inputElement.$el.focus();
+        }
+      });
     };
 
     const finishEdit = (step) => {
@@ -55,6 +65,12 @@ export default defineComponent({
         id: newId,
         editing: false,
       });
+    };
+
+    const removeLastStep = () => {
+      if (steps.value.length > 0) {
+        steps.value.pop(); // 移除數組中的最後一個元素
+      }
     };
 
     const onChange = (list) => {
@@ -80,7 +96,14 @@ export default defineComponent({
       }
     });
 
-    return { steps, editStep, finishEdit, addNewStep, onChange };
+    return {
+      steps,
+      editStep,
+      finishEdit,
+      addNewStep,
+      removeLastStep,
+      onChange,
+    };
   },
 });
 </script>
