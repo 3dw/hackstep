@@ -38,7 +38,7 @@ export default defineComponent({
         '/edit/' +
         steps.value
           .map((o) => {
-            return o.name;
+            return o.name.replace(/\s/g, '_');
           })
           .join('%20');
       router.push(path);
