@@ -1,8 +1,8 @@
 # hackstep
  一個無後端的分享知識平台
 
+# 相關專案
 [教育元語言](https://github.com/bestian/edu-lang)
-的第一個應用
 
 # 目標 Goal
 無後端小階梯編輯 + 分享介面
