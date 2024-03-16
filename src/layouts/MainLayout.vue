@@ -4,12 +4,15 @@ q-layout(view="lHh Lpr lFf")
   q-header(elevated)
     q-toolbar
       // 定義二個按鈕：編輯步驟和複製連結
-      // q-btn(flat, dense, round, icon="menu", aria-label="Menu", @click="toggleLeftDrawer")
+      q-btn(flat, dense, round, icon="menu", aria-label="Menu", @click="toggleLeftDrawer")
       //q-btn(@click="editStep" flat round icon="edit" aria-label="Edit Step")
       q-btn(@click="copyLink" flat round icon="ios_share" aria-label="Share" label="Share")
-  //q-drawer(v-model="leftDrawerOpen", show-if-above, bordered)
+  q-drawer(v-model="leftDrawerOpen", show-if-above, bordered)
     q-list
-      q-item-label(header) 設定
+      q-item(to="/")
+        q-btn(flat, dense, icon = "home") 首頁
+      q-item(to="/intro") 
+        q-btn(flat, dense, icon = "info") 說明
   q-page-container
     // 使用router-view顯示基於當前路由地址的子組件
     router-view()
