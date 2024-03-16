@@ -6,7 +6,7 @@ q-layout(view="lHh Lpr lFf")
       // 定義二個按鈕：編輯步驟和複製連結
       // q-btn(flat, dense, round, icon="menu", aria-label="Menu", @click="toggleLeftDrawer")
       //q-btn(@click="editStep" flat round icon="edit" aria-label="Edit Step")
-      q-btn(@click="copyLink" flat round icon="ios_share" aria-label="Copy Link" label="Copy Link")
+      q-btn(@click="copyLink" flat round icon="ios_share" aria-label="Share" label="Share")
   //q-drawer(v-model="leftDrawerOpen", show-if-above, bordered)
     q-list
       q-item-label(header) 設定

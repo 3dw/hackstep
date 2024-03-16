@@ -1,15 +1,16 @@
 <template lang="pug">
 q-page.row.items-center.justify-evenly
   draggable.dragArea.list-group.w-full(v-model="steps" @change="onChange")
-    .item(v-for="(step, idx) in steps" :key="step.id")
+    .item.flex.row.justify-between.align-center(v-for="(step, idx) in steps" :key="step.id")
       template(v-if="step.editing")
         q-input.filled(:autofocus="true", v-model="step.name" dense :ref="`input-${step.id}`" @blur="finishEdit(step)" @keyup.enter="finishEdit(step)")
       template(v-else)
-        | {{ step.name }}
-        q-btn.small(@click="editStep(step)" icon="edit")
+        div {{ step.name }}
+      q-btn.small(flat, dense, @click="editStep(step)" icon="edit" class="q-ml-md")
+      q-btn.small(color="red", flat, dense, @click="removeStep(step.id)" icon="delete" class="q-ml-md")
   .row(fixed-bottom-right)
     q-btn(color="green" @click="addNewStep" class="q-ma-md" icon="add" label="Add Step")
-    q-btn(color="red" @click="removeLastStep" class="q-ma-md" icon="add" label="Remove Step")
+    q-btn(color="red" @click="removeLastStep" class="q-ma-md" icon="delete" label="Remove Last Step")
 </template>
 
 <script lang="ts">
@@ -88,6 +89,14 @@ export default defineComponent({
       }
     };
 
+    const removeStep = (id) => {
+      const index = steps.value.findIndex(step => step.id === id);
+      if (index !== -1) {
+        steps.value.splice(index, 1);  // 根据索引移除元素
+        onChange();  // 更新路由以反映更改
+      }
+    };
+
 
     onMounted(() => {
       if (route.params.steps) {
@@ -106,6 +115,7 @@ export default defineComponent({
       finishEdit,
       addNewStep,
       removeLastStep,
+      removeStep,
       onChange,
     };
   },
