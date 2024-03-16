@@ -6,8 +6,9 @@ q-page.row.items-center.justify-evenly
         q-input.filled(:autofocus="true", v-model="step.name" dense :ref="`input-${step.id}`" @blur="finishEdit(step)" @keyup.enter="finishEdit(step)")
       template(v-else)
         div {{ step.name }}
-      q-btn.small(flat, dense, @click="editStep(step)" icon="edit" class="q-ml-md")
-      q-btn.small(color="red", flat, dense, @click="removeStep(step.id)" icon="delete" class="q-ml-md")
+      .filler
+      q-btn.small(flat, dense, @click="editStep(step)" icon="edit")
+      q-btn.small(color="red", flat, dense, @click="removeStep(step.id)" icon="delete")
   .row(fixed-bottom-right)
     q-btn(color="green" @click="addNewStep" class="q-ma-md" icon="add" label="Add Step")
     q-btn(color="red" @click="removeLastStep" class="q-ma-md" icon="delete" label="Remove Last Step")
@@ -121,3 +122,30 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  position: relative;
+  left: -6vw;
+  max-width: 88vw;
+  overflow-wrap: break-word;
+  overflow: auto;
+  white-space: normal;
+}
+
+/* 確保 .item 內的按鈕顯示正確 */
+.item .q-btn {
+  display: inline-flex; /* Quasar的按鈕默認使用inline-flex，這行確保按鈕保持預設顯示方式 */
+  margin-left: 8px; /* 按需添加間隔 */
+}
+
+.filler {
+  display: inline-flex;
+  flex-grow: 1;
+}
+
+
+</style>
