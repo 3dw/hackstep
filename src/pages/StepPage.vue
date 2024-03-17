@@ -7,7 +7,7 @@ q-page.row.items-center.justify-evenly
       template(v-else)
         div {{ step.name }}
       .filler
-      q-btn.small(flat, dense, @click="editStep(step)" icon="edit")
+      q-btn.small(color="primary",flat, dense, @click="editStep(step)" icon="edit")
       q-btn.small(color="red", flat, dense, @click="removeStep(step.id)" icon="delete")
   .row(fixed-bottom-right)
     q-btn(color="green" @click="addNewStep" class="q-ma-md" icon="add" label="Add Step")

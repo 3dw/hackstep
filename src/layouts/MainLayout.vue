@@ -9,10 +9,12 @@ q-layout(view="lHh Lpr lFf")
       q-btn(@click="copyLink" flat round icon="ios_share" aria-label="Share" label="Share")
   q-drawer(v-model="leftDrawerOpen", show-if-above, bordered)
     q-list
-      q-item(to="/")
-        q-btn(flat, dense, icon = "home") 首頁
-      q-item(to="/intro") 
-        q-btn(flat, dense, icon = "info") 說明
+      q-item 
+        q-btn(:class="{active: isIn('intro')}", flat, dense, icon = "info", @click="goIntro") 說明
+      q-item
+        q-btn(:class="{active: isIn('edit')}", flat, dense, icon = "edit", @click="goEdit") 編輯
+      q-item
+        q-btn(:class="{active: isIn('search')}", flat, dense, icon = "link", @click="goSearch") 聯想
   q-page-container
     // 使用router-view顯示基於當前路由地址的子組件
     router-view()
@@ -38,6 +40,25 @@ export default defineComponent({
     };
   },
   methods: {
+    isIn(path) {
+      console.log(this.$route.path.indexOf(path) > -1)
+      return this.$route.path.indexOf(path) > -1
+    },
+    goIntro() {
+      this.$router.push(
+        '/intro/' + this.$route.params.steps
+      )
+    },
+    goEdit() {
+      this.$router.push(
+        '/edit/' + this.$route.params.steps
+      );     
+    },
+    goSearch() {
+      this.$router.push(
+        '/search/' + this.$route.params.steps
+      );     
+    },
     editStep() {
       // 檢查是否已經在編輯頁面，如果是，則顯示提示
       if (this.$route.name == 'EdiTor') {
@@ -67,3 +88,11 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+
+.active {
+  border-left: 3px solid #ccc;
+}
+
+</style>

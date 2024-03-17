@@ -1,5 +1,10 @@
 // app global css in SCSS form
 
+a, button, .q-stepper__title, .q-stepper__caption {
+  cursor: pointer !important;
+  color: blue;
+}
+
 .item {
   cursor: grab;
   padding: 1.2em;
