@@ -110,6 +110,19 @@ export default defineComponent({
       }
     });
 
+    
+    watch(() => route.params.steps, (newSteps) => {
+      // 更新`steps`模型
+      if (newSteps) {
+        const routeSteps = newSteps.split(/%20|\s/);
+        steps.value = routeSteps.map((name, idx) => ({
+          id: idx,
+          name,
+          editing: false,
+        }));
+      }
+    });
+
     return {
       steps,
       editStep,
