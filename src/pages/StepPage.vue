@@ -15,7 +15,7 @@ q-page.row.items-center.justify-evenly
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, nextTick } from 'vue';
+import { defineComponent, ref, onMounted, watch, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { VueDraggableNext } from 'vue-draggable-next';
 
@@ -110,7 +110,6 @@ export default defineComponent({
       }
     });
 
-    
     watch(() => route.params.steps, (newSteps) => {
       // 更新`steps`模型
       if (newSteps) {
