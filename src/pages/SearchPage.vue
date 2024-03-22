@@ -2,11 +2,12 @@
   <q-page class="flex flex-center">
     <q-stepper v-model="step" vertical color="primary">
       <q-step
+        style="min-width: 320px;"
         v-for="item in steps"
         :name="item.id.toString()"
         :key="item.id"
-        :title="item.name"
-        :caption="`Search ${item.name} on Google`"
+        :title="`在Google上搜詢${item.name}`"
+        icon="search"
         clickable
         @click="openInNewTab(item.name)"
       >

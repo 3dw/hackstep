@@ -17,7 +17,7 @@ q-layout(view="lHh Lpr lFf")
       q-item
         q-btn(:class="{active: isIn('edit')}", flat, dense, icon = "edit", @click="goEdit") 編輯
       q-item
-        q-btn(:class="{active: isIn('search')}", flat, dense, icon = "link", @click="goSearch") 聯想
+        q-btn(:class="{active: isIn('search')}", flat, dense, icon = "link", @click="goSearch") 搜詢
   q-page-container
     // 使用router-view顯示基於當前路由地址的子組件
     router-view()
