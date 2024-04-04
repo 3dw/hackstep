@@ -28,12 +28,16 @@ q-layout(view="lHh Lpr lFf")
 </template>
 
 <script lang="ts">
+import { QSlider } from 'quasar';
 import { saveAs } from 'file-saver';
 import { defineComponent, ref } from 'vue';
 // import { useRoute } from 'vue-router';
 
 export default defineComponent({
   name: 'MainLayout',
+  components: {
+    QSlider,
+  },
   setup() {
     // 使用Vue 3 Composition API進行狀態管理
     const leftDrawerOpen = ref(false);
