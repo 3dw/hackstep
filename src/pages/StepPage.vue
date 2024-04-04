@@ -5,7 +5,7 @@ q-page.row.items-center.justify-evenly
       template(v-if="step.editing")
         q-input.filled(:autofocus="true", v-model="step.name" dense :ref="`input-${step.id}`" @blur="finishEdit(step)" @keyup.enter="finishEdit(step)")
       template(v-else)
-        div {{ step.name }}
+        div(:style="{'font-size': fontSizeRef + 'px'}") {{ step.name }}
       .filler
       q-btn.small(color="primary",flat, dense, @click="editStep(step)" icon="edit")
       q-btn.small(color="red", flat, dense, @click="removeStep(step.id)" icon="delete")
@@ -15,16 +15,23 @@ q-page.row.items-center.justify-evenly
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, watch, nextTick } from 'vue';
+import { defineComponent, ref, toRefs, onMounted, watch, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { VueDraggableNext } from 'vue-draggable-next';
 
 export default defineComponent({
   name: 'EdiTor',
+  props: {
+    font_size: {
+      type: Number,
+      default: 16,
+    },
+  },
   components: {
     draggable: VueDraggableNext,
   },
-  setup() {
+  setup(props) {
+    const { font_size: fontSizeRef } = toRefs(props);
     const steps = ref([
       { name: 'Step1', id: 0, editing: false },
       { name: 'Step2', id: 1, editing: false },
@@ -125,6 +132,7 @@ export default defineComponent({
     );
 
     return {
+      fontSizeRef,
       steps,
       editStep,
       finishEdit,

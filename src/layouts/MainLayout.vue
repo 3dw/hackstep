@@ -18,9 +18,13 @@ q-layout(view="lHh Lpr lFf")
         q-btn(:class="{active: isIn('edit')}", flat, dense, icon = "edit", @click="goEdit") 編輯
       q-item
         q-btn(:class="{active: isIn('search')}", flat, dense, icon = "link", @click="goSearch") 搜詢
+      q-item
+        | 小
+        q-slider(v-model="font_size" :min="10" :max="30" label :label-value="font_size + 'px'" color="primary")
+        span.big 大
   q-page-container
     // 使用router-view顯示基於當前路由地址的子組件
-    router-view()
+    router-view(:font_size="font_size")
 </template>
 
 <script lang="ts">
@@ -33,9 +37,11 @@ export default defineComponent({
   setup() {
     // 使用Vue 3 Composition API進行狀態管理
     const leftDrawerOpen = ref(false);
+    const font_size = ref(16); // 預設值為16
 
     return {
       hash: ref(window.location.hash || ''),
+      font_size,
       leftDrawerOpen,
       toggleLeftDrawer() {
         // 切換側邊抽屜的開合狀態
@@ -134,5 +140,10 @@ export default defineComponent({
 <style scoped>
 .active {
   border-left: 3px solid #ccc;
+}
+.big {
+  font-size: 30px;
+  position: relative;
+  top: -0.5em;
 }
 </style>
