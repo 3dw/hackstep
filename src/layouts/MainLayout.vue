@@ -57,7 +57,7 @@ export default defineComponent({
   },
   methods: {
     isIn(path) {
-      console.log(this.$route.path.indexOf(path) > -1);
+      // console.log(this.$route.path.indexOf(path) > -1);
       return this.$route.path.indexOf(path) > -1;
     },
     goIntro() {
