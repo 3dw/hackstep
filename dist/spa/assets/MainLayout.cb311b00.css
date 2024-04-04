@@ -1,0 +1,9 @@
+
+.active[data-v-3bd19c82] {
+  border-left: 3px solid #ccc;
+}
+.big[data-v-3bd19c82] {
+  font-size: 30px;
+  position: relative;
+  top: -0.5em;
+}
