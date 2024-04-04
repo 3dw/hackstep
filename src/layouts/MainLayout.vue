@@ -12,7 +12,7 @@ q-layout(view="lHh Lpr lFf")
 
   q-drawer(v-model="leftDrawerOpen", show-if-above, bordered)
     q-list
-      q-item 
+      q-item
         q-btn(:class="{active: isIn('intro')}", flat, dense, icon = "info", @click="goIntro") 說明
       q-item
         q-btn(:class="{active: isIn('edit')}", flat, dense, icon = "edit", @click="goEdit") 編輯
@@ -24,6 +24,7 @@ q-layout(view="lHh Lpr lFf")
 </template>
 
 <script lang="ts">
+import { saveAs } from 'file-saver';
 import { defineComponent, ref } from 'vue';
 // import { useRoute } from 'vue-router';
 
@@ -44,23 +45,17 @@ export default defineComponent({
   },
   methods: {
     isIn(path) {
-      console.log(this.$route.path.indexOf(path) > -1)
-      return this.$route.path.indexOf(path) > -1
+      console.log(this.$route.path.indexOf(path) > -1);
+      return this.$route.path.indexOf(path) > -1;
     },
     goIntro() {
-      this.$router.push(
-        '/intro/' + this.$route.params.steps
-      )
+      this.$router.push('/intro/' + this.$route.params.steps);
     },
     goEdit() {
-      this.$router.push(
-        '/edit/' + this.$route.params.steps
-      );     
+      this.$router.push('/edit/' + this.$route.params.steps);
     },
     goSearch() {
-      this.$router.push(
-        '/search/' + this.$route.params.steps
-      );     
+      this.$router.push('/search/' + this.$route.params.steps);
     },
     editStep() {
       // 檢查是否已經在編輯頁面，如果是，則顯示提示
@@ -74,18 +69,18 @@ export default defineComponent({
     },
     downloadSteps() {
       const title = window.prompt('Please Enter a Title:');
-      const steps = this.$route.params.steps.split(/%20|\s/)
-      let markdownContent = steps.map((step, index) => `${index + 1}. ${step}`).join('\n');
-      // 添加文件開頭，如有需要
+      if (!title) return; // 用户取消输入时退出函数
+
+      const steps = this.$route.params.steps.split(/%20|\s/);
+      let markdownContent = steps
+        .map((step, index) => `${index + 1}. ${step}`)
+        .join('\n');
       markdownContent = '# ' + title + '\n\n' + markdownContent;
-      
-      const blob = new Blob([markdownContent], { type: 'text/markdown;charset=utf-8' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = title + '.md';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+
+      const blob = new Blob([markdownContent], {
+        type: 'text/markdown;charset=utf-8',
+      });
+      saveAs(blob, title + '.md');
     },
     clickFileUpload() {
       this.$refs.fileInput.click(); // 觸發檔案選擇
@@ -98,16 +93,19 @@ export default defineComponent({
           const content = e.target.result;
           const steps = this.parseMarkdown(content);
           const stepsJoined = steps.join(' ');
-          this.$router.push({ path: `/edit/${encodeURIComponent(stepsJoined)}` });
+          this.$router.push({
+            path: `/edit/${encodeURIComponent(stepsJoined)}`,
+          });
           // bug here..... ///
-
         };
         reader.readAsText(file);
       }
     },
     parseMarkdown(content) {
       const lines = content.split('\n');
-      const steps = lines.filter(line => line.match(/^\d+\.\s+/)).map(line => line.replace(/^\d+\.\s+/, ''));
+      const steps = lines
+        .filter((line) => line.match(/^\d+\.\s+/))
+        .map((line) => line.replace(/^\d+\.\s+/, ''));
       return steps; // 返回解析後的步驟列表
     },
     copyLink() {
@@ -131,9 +129,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
 .active {
   border-left: 3px solid #ccc;
 }
-
 </style>
