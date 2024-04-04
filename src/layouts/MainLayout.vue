@@ -5,10 +5,11 @@ q-layout(view="lHh Lpr lFf")
     q-toolbar
       q-btn(flat, dense, round, icon="menu", aria-label="Menu", @click="toggleLeftDrawer")
       q-btn(@click="copyLink" flat round icon="ios_share" aria-label="Share" label="分享")
-      q-btn(@click="downloadSteps" flat round icon="cloud_download" aria-label="Download")
-      span.fat-only 下載
-      q-btn(flat round icon="cloud_upload" @click="clickFileUpload()")
-      span.fat-only 上傳
+      span.fat-only 當前網址
+      q-btn(@click="downloadSteps" flat round icon="cloud_download" aria-label="Download", label="下載")
+      span.fat-only MarkDown檔案
+      q-btn(flat round icon="cloud_upload" @click="clickFileUpload()", aria-label="Upload", label="上傳")
+      span.fat-only MarkDown檔案
       input(type="file" accept=".md" @change="handleFileUpload" ref="fileInput" style="display: none;")
 
 
