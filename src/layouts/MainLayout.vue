@@ -96,7 +96,10 @@ export default defineComponent({
           this.$router.push({
             path: `/edit/${encodeURIComponent(stepsJoined)}`,
           });
-          // bug here..... ///
+        };
+        reader.onerror = (error) => {
+          console.error('File reading error:', error);
+          alert('An error occurred while reading the file.');
         };
         reader.readAsText(file);
       }
