@@ -34,7 +34,6 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
 
-
     const onChange = () => {
       const path =
         '/edit/' +
@@ -64,7 +63,7 @@ export default defineComponent({
       console.log('end edit!');
       step.editing = false;
 
-      onChange()
+      onChange();
       // 可以在這裡添加對step.name的驗證或其他邏輯
     };
 
@@ -81,23 +80,23 @@ export default defineComponent({
         id: newId,
         editing: false,
       });
+      onChange();
     };
 
     const removeLastStep = () => {
       if (steps.value.length > 0) {
         steps.value.pop(); // 移除數組中的最後一個元素
-        onChange()
+        onChange();
       }
     };
 
     const removeStep = (id) => {
-      const index = steps.value.findIndex(step => step.id === id);
+      const index = steps.value.findIndex((step) => step.id === id);
       if (index !== -1) {
-        steps.value.splice(index, 1);  // 根据索引移除元素
-        onChange();  // 更新路由以反映更改
+        steps.value.splice(index, 1); // 根据索引移除元素
+        onChange(); // 更新路由以反映更改
       }
     };
-
 
     onMounted(() => {
       if (route.params.steps) {
@@ -110,17 +109,20 @@ export default defineComponent({
       }
     });
 
-    watch(() => route.params.steps, (newSteps) => {
-      // 更新`steps`模型
-      if (newSteps) {
-        const routeSteps = newSteps.split(/%20|\s/);
-        steps.value = routeSteps.map((name, idx) => ({
-          id: idx,
-          name,
-          editing: false,
-        }));
+    watch(
+      () => route.params.steps,
+      (newSteps) => {
+        // 更新`steps`模型
+        if (newSteps) {
+          const routeSteps = newSteps.split(/%20|\s/);
+          steps.value = routeSteps.map((name, idx) => ({
+            id: idx,
+            name,
+            editing: false,
+          }));
+        }
       }
-    });
+    );
 
     return {
       steps,
@@ -139,7 +141,7 @@ export default defineComponent({
 .item {
   display: flex;
   align-items: center;
-  justify-content: space-between; 
+  justify-content: space-between;
   position: relative;
   left: -6vw;
   max-width: 88vw;
@@ -158,6 +160,4 @@ export default defineComponent({
   display: inline-flex;
   flex-grow: 1;
 }
-
-
 </style>
