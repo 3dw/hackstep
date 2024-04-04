@@ -10,8 +10,8 @@ q-page.row.items-center.justify-evenly
       q-btn.small(color="primary",flat, dense, @click="editStep(step)" icon="edit")
       q-btn.small(color="red", flat, dense, @click="removeStep(step.id)" icon="delete")
   .row(fixed-bottom-right)
-    q-btn(color="green" @click="addNewStep" class="q-ma-md" icon="add" label="Add Step")
-    q-btn(color="red" @click="removeLastStep" class="q-ma-md" icon="delete" label="Remove Last Step")
+    q-btn(:style="{'font-size': fontSizeRef + 'px'}", color="green" @click="addNewStep" class="q-ma-md" icon="add" label="增加步驟")
+    q-btn(:style="{'font-size': fontSizeRef + 'px'}", color="red" @click="removeLastStep" class="q-ma-md" icon="delete" label="移除最後的步驟")
 </template>
 
 <script lang="ts">

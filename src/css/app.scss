@@ -1,6 +1,9 @@
 // app global css in SCSS form
 
-a, button, .q-stepper__title, .q-stepper__caption {
+a,
+button,
+.q-stepper__title,
+.q-stepper__caption {
   cursor: pointer !important;
   color: blue;
 }
@@ -18,4 +21,10 @@ a, button, .q-stepper__title, .q-stepper__caption {
 
 .q-btn {
   margin-left: 1em;
+}
+
+@media (max-width: 767px) {
+  .fat-only {
+    display: none;
+  }
 }
