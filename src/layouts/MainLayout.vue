@@ -6,8 +6,9 @@ q-layout(view="lHh Lpr lFf")
       q-btn(flat, dense, round, icon="menu", aria-label="Menu", @click="toggleLeftDrawer")
       q-btn(@click="copyLink" flat round icon="ios_share" aria-label="Share" label="分享")
       span.fat-only 當前網址
-      q-btn(@click="downloadSteps" flat round icon="cloud_download" aria-label="Download", label="下載")
-      span.fat-only MarkDown檔案
+      q-btn(v-if="!isInApp", @click="downloadSteps" flat round icon="cloud_download" aria-label="Download", label="下載")
+      span.fat-only(v-if="!isInApp") MarkDown檔案
+      q-btn(v-else, label="在瀏覽器中打開", @click="openInExternalBrowser")
       q-btn(flat round icon="cloud_upload" @click="clickFileUpload()", aria-label="Upload", label="上傳")
       span.fat-only MarkDown檔案
       input(type="file" accept=".md" @change="handleFileUpload" ref="fileInput" style="display: none;")
@@ -34,7 +35,11 @@ q-layout(view="lHh Lpr lFf")
 import { QSlider } from 'quasar';
 import { saveAs } from 'file-saver';
 import { defineComponent, ref } from 'vue';
+import InApp from 'detect-inapp';
 // import { useRoute } from 'vue-router';
+const inapp = new InApp(
+  navigator.userAgent || navigator.vendor || window.opera
+);
 
 export default defineComponent({
   name: 'MainLayout',
@@ -46,9 +51,12 @@ export default defineComponent({
     const leftDrawerOpen = ref(false);
     const font_size = ref(16); // 預設值為16
 
+    const isInApp = inapp.isInApp;
+
     return {
       hash: ref(window.location.hash || ''),
       font_size,
+      isInApp,
       leftDrawerOpen,
       toggleLeftDrawer() {
         // 切換側邊抽屜的開合狀態
@@ -57,6 +65,13 @@ export default defineComponent({
     };
   },
   methods: {
+    openInExternalBrowser() {
+      // 獲取當前頁面的URL
+      const url = window.location.href;
+
+      // 嘗試在新的瀏覽器窗口中打開當前頁面
+      window.open(url, '_blank').focus();
+    },
     isIn(path) {
       // console.log(this.$route.path.indexOf(path) > -1);
       return this.$route.path.indexOf(path) > -1;

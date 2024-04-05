@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.16.4",
+    "detect-inapp": "^1.4.0",
     "edu-lang": "^0.3.0",
     "file-saver": "^2.0.5",
     "pinia": "^2.0.11",
