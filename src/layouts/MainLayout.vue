@@ -8,9 +8,9 @@ q-layout(view="lHh Lpr lFf")
       span.fat-only 當前網址
       q-btn(v-if="!isInApp", @click="downloadSteps" flat round icon="cloud_download" aria-label="Download", label="下載")
       span.fat-only(v-if="!isInApp") MarkDown檔案
-      q-btn(v-else, label="在瀏覽器中打開", @click="openInExternalBrowser")
-      q-btn(flat round icon="cloud_upload" @click="clickFileUpload()", aria-label="Upload", label="上傳")
-      span.fat-only MarkDown檔案
+      // q-btn(v-else, label="在瀏覽器中打開", flat round @click="openInExternalBrowser")
+      q-btn(v-if="!isInApp", flat round icon="cloud_upload" @click="clickFileUpload()", aria-label="Upload", label="上傳")
+      span.fat-only(v-if="!isInApp") MarkDown檔案
       input(type="file" accept=".md" @change="handleFileUpload" ref="fileInput" style="display: none;")
 
 
