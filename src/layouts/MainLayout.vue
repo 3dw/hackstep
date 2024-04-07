@@ -8,10 +8,11 @@ q-layout(view="lHh Lpr lFf")
       span.fat-only 當前網址
       q-btn(v-if="!isInApp", @click="downloadSteps" flat round icon="cloud_download" aria-label="Download", label="下載")
       span.fat-only(v-if="!isInApp") MarkDown檔案
-      // q-btn(v-else, label="在瀏覽器中打開", flat round @click="openInExternalBrowser")
       q-btn(v-if="!isInApp", flat round icon="cloud_upload" @click="clickFileUpload()", aria-label="Upload", label="上傳")
       span.fat-only(v-if="!isInApp") MarkDown檔案
       input(type="file" accept=".md" @change="handleFileUpload" ref="fileInput" style="display: none;")
+      // 新增儲存按鈕
+      q-btn(flat, round, icon="save", aria-label="Save", @click="savePath", label="儲存")
 
 
   q-drawer(v-model="leftDrawerOpen", show-if-above, bordered)
@@ -26,6 +27,11 @@ q-layout(view="lHh Lpr lFf")
         | 小
         q-slider(v-model="font_size" :min="10" :max="30" label :label-value="font_size + 'px'" color="primary")
         span.big 大
+      q-separator
+      q-item(v-for="(path, index) in savedPaths" :key="index" @click="navigateTo(path.path)")
+        | {{ path.name }}
+        q-btn(flat color="red" icon="delete" @click.stop="removeFromLeftDrawer(index)" aria-label="Remove")
+
   q-page-container
     // 使用router-view顯示基於當前路由地址的子組件
     router-view(:font_size="font_size")
@@ -34,7 +40,7 @@ q-layout(view="lHh Lpr lFf")
 <script lang="ts">
 import { QSlider } from 'quasar';
 import { saveAs } from 'file-saver';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import InApp from 'detect-inapp';
 // import { useRoute } from 'vue-router';
 const inapp = new InApp(
@@ -53,7 +59,30 @@ export default defineComponent({
 
     const isInApp = inapp.isInApp;
 
+    const savedPaths = ref(
+      JSON.parse(localStorage.getItem('savedPaths') || '[]')
+    );
+
+    const navigateTo = (path) => {
+      // 使用vue-router的導航功能
+      this.$router.push(path);
+      leftDrawerOpen.value = false;
+    };
+
+    // 當組件掛載後，可以進行一些初始化操作，例如從localStorage加載數據
+    onMounted(() => {
+      // 此處可以放置任何需要在組件掛載時執行的代碼
+    });
+
+    // 監聽localStorage中savedPaths的變化，這裡簡化了，實際應用中你可能需要更複雜的邏輯
+    // 來監聽localStorage的變化，或者在更改localStorage時手動更新savedPaths
+    window.addEventListener('storage', () => {
+      savedPaths.value = JSON.parse(localStorage.getItem('savedPaths') || '[]');
+    });
+
     return {
+      savedPaths,
+      navigateTo,
       hash: ref(window.location.hash || ''),
       font_size,
       isInApp,
@@ -65,12 +94,37 @@ export default defineComponent({
     };
   },
   methods: {
-    openInExternalBrowser() {
-      // 獲取當前頁面的URL
-      const url = window.location.href;
+    removeFromLeftDrawer(index) {
+      // 深拷貝savedPaths以避免直接修改原始數據
+      console.log(this.savedPaths);
+      const updatedPaths = [...this.savedPaths];
 
-      // 嘗試在新的瀏覽器窗口中打開當前頁面
-      window.open(url, '_blank').focus();
+      // 從拷貝的數組中移除指定的項目
+      updatedPaths.splice(index, 1);
+
+      // 重新賦值觸發更新
+      this.savedPaths = updatedPaths;
+
+      // 更新localStorage
+      localStorage.setItem('savedPaths', JSON.stringify(this.savedPaths.value));
+
+      // 提示用戶
+      alert('已從側欄移除');
+    },
+    savePath() {
+      const fileName = window.prompt('請輸入檔名:');
+      if (!fileName) return; // 如果使用者取消了輸入，就直接返回
+
+      const path = this.$route.path; // 獲取當前路由的路徑
+      const savedPaths = JSON.parse(localStorage.getItem('savedPaths') || '[]'); // 從localStorage中讀取已存的路徑，如果沒有則設為空陣列
+
+      savedPaths.push({ name: fileName, path: path }); // 加入新的檔案名和路徑
+      localStorage.setItem('savedPaths', JSON.stringify(savedPaths || [])); // 將更新後的陣列存回localStorage
+
+      // 也更新組件的savedPaths狀態
+      this.savedPaths = savedPaths;
+
+      alert('路徑已儲存'); // 給予使用者反饋
     },
     isIn(path) {
       // console.log(this.$route.path.indexOf(path) > -1);
@@ -96,7 +150,7 @@ export default defineComponent({
       );
     },
     downloadSteps() {
-      const title = window.prompt('Please Enter a Title:');
+      const title = window.prompt('請輸入檔名:');
       if (!title) return; // 用户取消输入时退出函数
 
       const steps = this.$route.params.steps.split(/%20|\s/);
