@@ -1,7 +1,7 @@
 <template lang="pug">
 q-page.row.items-center.justify-evenly
   draggable.dragArea.list-group.w-full(v-model="steps" @change="onChange")
-    .item.flex.row.justify-between.align-center(v-for="(step, idx) in steps" :key="step.id")
+    .item.flex.row.justify-between.align-center(v-for="(step, idx) in steps" :key="step.id", @click="toggleEdit(step)")
       template(v-if="step.editing")
         q-input.filled(:autofocus="true", v-model="step.name" dense :ref="`input-${step.id}`" @blur="finishEdit(step)" @keyup.enter="finishEdit(step)")
       template(v-else)
@@ -13,13 +13,16 @@ q-page.row.items-center.justify-evenly
         span.invisible 刪除
   .row(fixed-bottom-right)
     q-btn(:style="{'font-size': fontSizeRef + 'px'}", color="green-10" @click="addNewStep" class="q-ma-md" icon="add" label="增加步驟")
-    q-btn(:style="{'font-size': fontSizeRef + 'px'}", color="red-10" @click="removeLastStep" class="q-ma-md" icon="delete" label="移除最後的步驟")
+    q-btn(:style="{'font-size': fontSizeRef + 'px'}", color="primary" icon="save" label="儲存" @click="savePath")
+
+    // q-btn(:style="{'font-size': fontSizeRef + 'px'}", color="red-10" @click="removeLastStep" class="q-ma-md" icon="delete" label="移除最後的步驟")
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, toRefs, onMounted, watch, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { VueDraggableNext } from 'vue-draggable-next';
+import { is } from 'quasar';
 
 export default defineComponent({
   name: 'EdiTor',
@@ -32,7 +35,7 @@ export default defineComponent({
   components: {
     draggable: VueDraggableNext,
   },
-  setup(props) {
+  setup(props, { emit }) {
     const { font_size: fontSizeRef } = toRefs(props);
     const steps = ref([
       { name: 'Step1', id: 0, editing: false },
@@ -42,6 +45,10 @@ export default defineComponent({
 
     const route = useRoute();
     const router = useRouter();
+
+    const savePath = () => {
+      emit('savePath'); // 發射自定義事件，名稱為 'save-steps'
+    };
 
     const onChange = () => {
       const path =
@@ -57,13 +64,24 @@ export default defineComponent({
     const editStep = (step) => {
       console.log('start edit!');
       step.editing = true;
+
+      // 定義正則表達式，檢查 "step" 後面是否跟著至少一個數字
+      const regex = /step\d+/;
+
+      // 使用 test() 方法檢查 step.name 是否符合正則表達式
+      const isMatch = regex.test(step.name);
+
+      if (isMatch) {
+        step.name = '';
+      }
+
       // 確保DOM已更新
       nextTick(() => {
         // 使用動態ref聚焦到對應的輸入框
         const inputRef = `input-${step.id}`;
-        const inputElement = refs[inputRef];
-        if (inputElement && inputElement.$el) {
-          inputElement.$el.focus();
+        const inputElement = ref(inputRef);
+        if (inputElement.value && inputElement.value.$el) {
+          inputElement.value.$el.focus();
         }
       });
     };
@@ -74,6 +92,14 @@ export default defineComponent({
 
       onChange();
       // 可以在這裡添加對step.name的驗證或其他邏輯
+    };
+
+    const toggleEdit = (step) => {
+      if (step.editing) {
+        finishEdit(step);
+      } else {
+        editStep(step);
+      }
     };
 
     const addNewStep = () => {
@@ -138,10 +164,12 @@ export default defineComponent({
       steps,
       editStep,
       finishEdit,
+      toggleEdit,
       addNewStep,
       removeLastStep,
       removeStep,
       onChange,
+      savePath,
     };
   },
 });

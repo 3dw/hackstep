@@ -37,7 +37,7 @@ q-layout(view="lHh Lpr lFf")
 
   q-page-container
     // 使用router-view顯示基於當前路由地址的子組件
-    router-view(:font_size="font_size")
+    router-view(:font_size="font_size", @savePath = "savePath")
 </template>
 
 <script lang="ts">
@@ -164,9 +164,22 @@ export default defineComponent({
       );
     },
     downloadSteps() {
-      const title = window.prompt('請輸入檔名:');
-      if (!title) return; // 用户取消输入时退出函数
+      // 假設當前路由的path是this.$route.path
+      const currentPath = this.$route.path;
+      // 尋找savedPaths中是否有相同的path
+      const savedPath = this.savedPaths.find((sp) => sp.path === currentPath);
 
+      let title;
+      if (savedPath) {
+        // 如果找到，使用該項目的name作為檔案名
+        title = savedPath.name;
+      } else {
+        // 如果沒找到，提示用戶輸入檔名
+        title = window.prompt('請輸入檔名:');
+        if (!title) return; // 如果用戶取消輸入，就直接返回
+      }
+
+      // 從這裡開始，代碼與之前相同...
       const steps = this.$route.params.steps.split(/%20|\s/);
       let markdownContent = steps
         .map((step, index) => `${index + 1}. ${step}`)
