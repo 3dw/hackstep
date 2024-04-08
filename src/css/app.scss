@@ -15,6 +15,11 @@ button,
   font-size: 18px;
 }
 
+.invisible {
+  font-size: 0;
+  opacity: 0;
+}
+
 .padded {
   padding: 1.2em;
 }

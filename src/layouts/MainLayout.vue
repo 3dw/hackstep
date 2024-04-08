@@ -32,8 +32,8 @@ q-layout(view="lHh Lpr lFf")
       q-item.bold(v-if="savedPaths.length > 0")
         | 捷徑
       q-item(v-for="(path, index) in savedPaths" :key="index")
-        q-btn(flat color="green" icon="link", @click="navigateTo(path.path)") {{ path.name }}
-        q-btn(flat color="red" icon="delete" @click.stop="removeFromLeftDrawer(index)" aria-label="Remove" title="移除捷徑")
+        q-btn(flat color="green-10" icon="link", @click="navigateTo(path.path)") {{ path.name }}
+        q-btn(flat color="red-10" icon="delete" @click.stop="removeFromLeftDrawer(index)" aria-label="Remove" title="移除捷徑")
 
   q-page-container
     // 使用router-view顯示基於當前路由地址的子組件

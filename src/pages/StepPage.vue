@@ -7,11 +7,13 @@ q-page.row.items-center.justify-evenly
       template(v-else)
         div(:style="{'font-size': fontSizeRef + 'px'}") {{ step.name }}
       .filler
-      q-btn.small(color="primary",flat, dense, @click="editStep(step)" icon="edit")
-      q-btn.small(color="red", flat, dense, @click="removeStep(step.id)" icon="delete")
+      q-btn.small(color="primary",flat, dense, @click="editStep(step)" icon="edit", title="編輯")
+        span.invisible 編輯
+      q-btn.small(color="red", flat, dense, @click="removeStep(step.id)" icon="delete", title="刪除")
+        span.invisible 刪除
   .row(fixed-bottom-right)
-    q-btn(:style="{'font-size': fontSizeRef + 'px'}", color="green" @click="addNewStep" class="q-ma-md" icon="add" label="增加步驟")
-    q-btn(:style="{'font-size': fontSizeRef + 'px'}", color="red" @click="removeLastStep" class="q-ma-md" icon="delete" label="移除最後的步驟")
+    q-btn(:style="{'font-size': fontSizeRef + 'px'}", color="green-10" @click="addNewStep" class="q-ma-md" icon="add" label="增加步驟")
+    q-btn(:style="{'font-size': fontSizeRef + 'px'}", color="red-10" @click="removeLastStep" class="q-ma-md" icon="delete" label="移除最後的步驟")
 </template>
 
 <script lang="ts">
