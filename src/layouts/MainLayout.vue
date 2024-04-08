@@ -217,7 +217,7 @@ export default defineComponent({
       navigator.clipboard
         .writeText(copyText)
         .then(() => {
-          window.alert('Copied the link: ' + copyText);
+          window.alert('已將當前超連結複製到剪貼簿: ' + copyText);
         })
         .catch((err) => {
           console.error('Could not copy text: ', err);
