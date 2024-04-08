@@ -28,9 +28,12 @@ q-layout(view="lHh Lpr lFf")
         q-slider(v-model="font_size" :min="10" :max="30" label :label-value="font_size + 'px'" color="primary")
         span.big 大
       q-separator
+
+      q-item.bold(v-if="savedPaths.length > 0")
+        | 捷徑
       q-item(v-for="(path, index) in savedPaths" :key="index" @click="navigateTo(path.path)")
         | {{ path.name }}
-        q-btn(flat color="red" icon="delete" @click.stop="removeFromLeftDrawer(index)" aria-label="Remove")
+        q-btn(flat color="red" icon="delete" @click.stop="removeFromLeftDrawer(index)" aria-label="Remove" title="移除捷徑")
 
   q-page-container
     // 使用router-view顯示基於當前路由地址的子組件
@@ -59,9 +62,18 @@ export default defineComponent({
 
     const isInApp = inapp.isInApp;
 
-    const savedPaths = ref(
-      JSON.parse(localStorage.getItem('savedPaths') || '[]')
-    );
+    console.log(localStorage.getItem('savedPaths'));
+
+    var savedPaths;
+
+    if (
+      !localStorage.getItem('savedPaths') ||
+      localStorage.getItem('savedPaths') === 'undefined'
+    ) {
+      savedPaths = ref([]);
+    } else {
+      savedPaths = ref(JSON.parse(localStorage.getItem('savedPaths') || '[]'));
+    }
 
     const navigateTo = (path) => {
       // 使用vue-router的導航功能
@@ -116,7 +128,7 @@ export default defineComponent({
       if (!fileName) return; // 如果使用者取消了輸入，就直接返回
 
       const path = this.$route.path; // 獲取當前路由的路徑
-      const savedPaths = JSON.parse(localStorage.getItem('savedPaths') || '[]'); // 從localStorage中讀取已存的路徑，如果沒有則設為空陣列
+      const savedPaths = [...this.savedPaths];
 
       savedPaths.push({ name: fileName, path: path }); // 加入新的檔案名和路徑
       localStorage.setItem('savedPaths', JSON.stringify(savedPaths || [])); // 將更新後的陣列存回localStorage

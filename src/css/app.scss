@@ -27,6 +27,14 @@ button,
   align-items: center;
 }
 
+.bold {
+  font-weight: bold;
+}
+
+.on-left {
+  margin-right: 1px;
+}
+
 @media (max-width: 767px) {
   .fat-only {
     display: none;
