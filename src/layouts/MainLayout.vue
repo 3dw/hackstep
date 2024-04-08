@@ -31,8 +31,8 @@ q-layout(view="lHh Lpr lFf")
 
       q-item.bold(v-if="savedPaths.length > 0")
         | 捷徑
-      q-item(v-for="(path, index) in savedPaths" :key="index" @click="navigateTo(path.path)")
-        | {{ path.name }}
+      q-item(v-for="(path, index) in savedPaths" :key="index")
+        q-btn(flat color="green" icon="link", @click="navigateTo(path.path)") {{ path.name }}
         q-btn(flat color="red" icon="delete" @click.stop="removeFromLeftDrawer(index)" aria-label="Remove" title="移除捷徑")
 
   q-page-container
@@ -45,7 +45,7 @@ import { QSlider } from 'quasar';
 import { saveAs } from 'file-saver';
 import { defineComponent, ref, onMounted } from 'vue';
 import InApp from 'detect-inapp';
-// import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 const inapp = new InApp(
   navigator.userAgent || navigator.vendor || window.opera
 );
@@ -56,6 +56,7 @@ export default defineComponent({
     QSlider,
   },
   setup() {
+    const router = useRouter();
     // 使用Vue 3 Composition API進行狀態管理
     const leftDrawerOpen = ref(false);
     const font_size = ref(16); // 預設值為16
@@ -77,7 +78,8 @@ export default defineComponent({
 
     const navigateTo = (path) => {
       // 使用vue-router的導航功能
-      this.$router.push(path);
+
+      router.push(path);
       leftDrawerOpen.value = false;
     };
 
