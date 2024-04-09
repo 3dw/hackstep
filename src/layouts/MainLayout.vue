@@ -29,7 +29,6 @@ q-layout(view="lHh Lpr lFf")
         q-slider(v-model="font_size" :min="10" :max="30" label :label-value="font_size + 'px'" color="primary")
         span.big 大
       q-separator
-
       q-item.bold(v-if="savedPaths.length > 0")
         | 捷徑
       q-item(v-for="(path, index) in savedPaths" :key="index")
