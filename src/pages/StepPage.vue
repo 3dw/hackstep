@@ -7,9 +7,11 @@ q-page.row.items-center.justify-evenly
       template(v-else)
         div(:style="{'font-size': fontSizeRef + 'px'}") {{ step.name }}
       .filler
-      q-btn.small(color="primary",flat, dense, @click="editStep(step)" icon="edit", title="編輯")
+      q-btn.small(color="primary",flat, dense, @click.stop="editStep(step)" icon="edit", title="編輯")
         span.invisible 編輯
-      q-btn.small(color="red", flat, dense, @click="removeStep(step.id)" icon="delete", title="刪除")
+      q-btn.small(color="secondary", flat, dense, @click.stop="openInNewTab(step.name)", title="搜詢", icon="search")
+        span.invisible 搜詢
+      q-btn.small(color="red", flat, dense, @click.stop="removeStep(step.id)" icon="delete", title="刪除")
         span.invisible 刪除
   .row(fixed-bottom-right)
     q-btn(:style="{'font-size': fontSizeRef + 'px'}", color="green-10" @click="addNewStep" class="q-ma-md" icon="add" label="增加步驟")
@@ -45,6 +47,11 @@ export default defineComponent({
 
     const route = useRoute();
     const router = useRouter();
+
+    const openInNewTab = (name) => {
+      const url = `https://www.google.com/search?q=${encodeURIComponent(name)}`;
+      window.open(url, '_blank');
+    };
 
     const savePath = () => {
       emit('savePath'); // 發射自定義事件，名稱為 'save-steps'
@@ -127,7 +134,7 @@ export default defineComponent({
 
     const removeStep = (id) => {
       const index = steps.value.findIndex((step) => step.id === id);
-      if (index !== -1) {
+      if (index !== -1 && window.confirm('確認要刪除該步驟嗎?此動作不能復原')) {
         steps.value.splice(index, 1); // 根据索引移除元素
         onChange(); // 更新路由以反映更改
       }
@@ -162,6 +169,7 @@ export default defineComponent({
     return {
       fontSizeRef,
       steps,
+      openInNewTab,
       editStep,
       finishEdit,
       toggleEdit,

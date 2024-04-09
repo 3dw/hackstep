@@ -11,8 +11,9 @@ q-layout(view="lHh Lpr lFf")
       q-btn(v-if="!isInApp", flat round icon="cloud_upload" @click="clickFileUpload()", aria-label="Upload", label="上傳")
       span.fat-only(v-if="!isInApp") MarkDown檔案
       input(type="file" accept=".md" @change="handleFileUpload" ref="fileInput" style="display: none;")
+      q-btn(flat, round, icon="info", aria-lebel="Inro" , @click="goIntro()") 提示
       // 新增儲存按鈕
-      q-btn(flat, round, icon="save", aria-label="Save", @click="savePath", label="儲存")
+      // q-btn(flat, round, icon="save", aria-label="Save", @click="savePath", label="儲存")
 
 
   q-drawer(v-model="leftDrawerOpen", show-if-above, bordered)
@@ -37,7 +38,7 @@ q-layout(view="lHh Lpr lFf")
 
   q-page-container
     // 使用router-view顯示基於當前路由地址的子組件
-    router-view(:font_size="font_size", @savePath = "savePath")
+    router-view(:font_size="font_size", @savePath = "savePath", @goEdit="goEdit")
 </template>
 
 <script lang="ts">
@@ -113,17 +114,22 @@ export default defineComponent({
       console.log(this.savedPaths);
       const updatedPaths = [...this.savedPaths];
 
-      // 從拷貝的數組中移除指定的項目
-      updatedPaths.splice(index, 1);
+      if (window.confirm('確認要刪除該捷徑嗎?此動作不能復原')) {
+        // 從拷貝的數組中移除指定的項目
+        updatedPaths.splice(index, 1);
 
-      // 重新賦值觸發更新
-      this.savedPaths = updatedPaths;
+        // 重新賦值觸發更新
+        this.savedPaths = updatedPaths;
 
-      // 更新localStorage
-      localStorage.setItem('savedPaths', JSON.stringify(this.savedPaths.value));
+        // 更新localStorage
+        localStorage.setItem(
+          'savedPaths',
+          JSON.stringify(this.savedPaths.value)
+        );
 
-      // 提示用戶
-      alert('已從側欄移除');
+        // 提示用戶
+        alert('已從側欄移除');
+      }
     },
     savePath() {
       const fileName = window.prompt('請輸入檔名:');

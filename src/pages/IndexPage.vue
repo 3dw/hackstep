@@ -30,7 +30,7 @@ export default defineComponent({
   },
   mounted() {
     // 使用編碼後的URL來處理空格等字符
-    const path = '/edit/step1%20step2%20step3';
+    const path = '/intro/step1%20step2%20step3';
     this.$router.push(path);
   },
 });
