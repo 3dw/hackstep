@@ -3,7 +3,7 @@ q-page.row.items-center.justify-evenly
   draggable.dragArea.list-group.w-full(v-model="steps" @change="onChange")
     .item.flex.row.justify-between.align-center(v-for="(step, idx) in steps" :key="step.id", @click="toggleEdit(step)")
       template(v-if="step.editing")
-        q-input.filled(:autofocus="true", v-model="step.name" dense :ref="`input-${step.id}`" @blur="finishEdit(step)" @keyup.enter="finishEdit(step)")
+        q-input.filled(:style="{'font-size': fontSizeRef + 'px'}", :autofocus="true", v-model="step.name" dense :ref="`input-${step.id}`" @blur="finishEdit(step)" @keyup.enter="finishEdit(step)")
       template(v-else)
         div(:style="{'font-size': fontSizeRef + 'px'}") {{ step.name }}
       .filler

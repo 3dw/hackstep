@@ -1,25 +1,33 @@
 <template lang="pug">
 q-page.index(padding="")
   .row
-    .col-xs-6.col-sm-4.col-md-3.padded
+    .col-xs-12.col-sm-4.col-md-3.padded
       q-img(class="fluid" style="border-radius: 15px;" src="../assets/climb.png")
-    .col-xs-6.col-sm-8.col-md-9.padded
+    .col-xs-12.col-sm-8.col-md-9.padded
       h6(v-for="(text, k) in parseMarkdownToSteps(intro).intros" :key="k") {{text}}
       div(v-for="(step, t) in parseMarkdownToSteps(intro).steps", :key="t")
-        p(v-if="!step.r") {{step.n}}
-        p(v-else)
+        p(v-if="!step.r", :style="{'font-size': fontSizeRef + 'px'}") {{step.n}}
+        p(v-else, :style="{'font-size': fontSizeRef + 'px'}")
           router-link(:to ="step.r", target="_blank", rel="noopener noreferrer") {{step.n}}
   .row
-    q-btn(color = "primary", @click="goEdit", label="即刻嘗試編輯", icon="edit")
+    q-btn(:style="{'font-size': fontSizeRef + 'px'}", color = "primary", @click="goEdit", label="即刻嘗試編輯", icon="edit")
 </template>
 
 <script lang="ts">
 import { parseMarkdownToSteps } from 'edu-lang';
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, toRefs } from 'vue';
 
 export default defineComponent({
   name: 'IndexPage',
-  setup() {
+  props: {
+    font_size: {
+      type: Number,
+      default: 16,
+    },
+  },
+  setup(props) {
+    const { font_size: fontSizeRef } = toRefs(props);
+
     const intro = ref(`
       Hackstep 是一個無邊界知識分享器。
       您可以
@@ -32,6 +40,7 @@ export default defineComponent({
 
       `);
     return {
+      fontSizeRef,
       parseMarkdownToSteps,
       intro,
     };
