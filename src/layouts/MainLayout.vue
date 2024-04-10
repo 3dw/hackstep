@@ -27,7 +27,7 @@ q-layout(view="lHh Lpr lFf")
       q-item(href="https://github.com/3dw/hackstep", target="_blank", rel="noopener noreferrer")
         q-btn(flat, dense, icon = "restaurant_menu") 原始碼
       q-item(to="/contact")
-        q-btn(:class="{active: isIn('intro')}", flat, dense, icon = "people") 聯絡
+        q-btn(:class="{active: isIn('contact')}", flat, dense, icon = "people") 聯絡
       q-item
         | 小
         q-slider(v-model="font_size" :min="10" :max="30" label :label-value="font_size + 'px'" color="primary")
