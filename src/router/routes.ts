@@ -6,10 +6,14 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
+      { path: 'contact', component: () => import('pages/ContactPage.vue') },
       // { path: 'edit', component: () => import('pages/StepPage.vue') },
       { path: 'edit/:steps', component: () => import('pages/StepPage.vue') },
-      { path: 'search/:steps', component: () => import('pages/SearchPage.vue') },
-      { path: 'intro/:steps', component: () => import('pages/IntroPage.vue') }
+      {
+        path: 'search/:steps',
+        component: () => import('pages/SearchPage.vue'),
+      },
+      { path: 'intro/:steps', component: () => import('pages/IntroPage.vue') },
     ],
   },
 
