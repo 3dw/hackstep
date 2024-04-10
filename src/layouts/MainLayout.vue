@@ -26,8 +26,8 @@ q-layout(view="lHh Lpr lFf")
         q-btn(:class="{active: isIn('search')}", flat, dense, icon = "link", @click="goSearch") 搜詢
       q-item(href="https://github.com/3dw/hackstep", target="_blank", rel="noopener noreferrer")
         q-btn(flat, dense, icon = "restaurant_menu") 原始碼
-      q-item(to="/contact")
-        q-btn(:class="{active: isIn('contact')}", flat, dense, icon = "people") 聯絡
+      q-item
+        q-btn(:class="{active: isIn('contact')}", flat, dense, icon = "people", @click="goContact") 聯絡
       q-item
         | 小
         q-slider(v-model="font_size" :min="10" :max="30" label :label-value="font_size + 'px'" color="primary")
@@ -154,6 +154,9 @@ export default defineComponent({
       return this.$route.path.indexOf(path) > -1;
     },
     goIntro() {
+      this.$router.push('/intro/' + this.$route.params.steps);
+    },
+    goContact() {
       this.$router.push('/intro/' + this.$route.params.steps);
     },
     goEdit() {
