@@ -157,7 +157,7 @@ export default defineComponent({
       this.$router.push('/intro/' + this.$route.params.steps);
     },
     goContact() {
-      this.$router.push('/intro/' + this.$route.params.steps);
+      this.$router.push('/contact/' + this.$route.params.steps);
     },
     goEdit() {
       this.$router.push('/edit/' + this.$route.params.steps);
