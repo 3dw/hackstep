@@ -76,7 +76,7 @@ export default defineComponent({
       const regex = /step\d+/;
 
       // 使用 test() 方法檢查 step.name 是否符合正則表達式
-      const isMatch = regex.test(step.name);
+      const isMatch = regex.test(step.name) || step.name === 'undefined';
 
       if (isMatch) {
         step.name = '';
