@@ -86,7 +86,7 @@ export default defineComponent({
       nextTick(() => {
         // 使用動態ref聚焦到對應的輸入框
         const inputRef = `input-${step.id}`;
-        const inputElement = ref(inputRef);
+        const inputElement = ref(inputRef); //  inputElement.value.$el.focus();無法使用因為nputElement.value.$el 是undefined
         if (inputElement.value && inputElement.value.$el) {
           inputElement.value.$el.focus();
         }
@@ -95,7 +95,7 @@ export default defineComponent({
 
     const finishEdit = (step) => {
       console.log('end edit!');
-      step.editing = false;
+      //step.editing = false; 這行不需要會過快跳出編輯模式或toggleEdit時就失去焦點，因為編輯內容"過長時"需要點選到文字段的任何一個位置開始進行編輯
 
       onChange();
       // 可以在這裡添加對step.name的驗證或其他邏輯
