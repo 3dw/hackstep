@@ -1,19 +1,20 @@
 <template lang="pug">
-q-page.row.items-center.justify-evenly
-  draggable.dragArea.list-group.w-full(v-model="steps" @change="onChange")
-    .item.flex.row.justify-between.align-center(v-for="(step, idx) in steps" :key="step.id", @click="toggleEdit(step)")
-      template(v-if="step.editing")
-        q-input.filled(:style="{'font-size': fontSizeRef + 'px'}", :autofocus="true", v-model="step.name" dense :ref="`input-${step.id}`" @blur="finishEdit(step)" @keyup.enter="finishEdit(step)")
-      template(v-else)
-        div(:style="{'font-size': fontSizeRef + 'px'}") {{ step.name }}
-      .filler
-      q-btn.small(color="primary",flat, dense, @click.stop="editStep(step)" icon="edit", title="編輯")
-        span.invisible 編輯
-      q-btn.small(color="secondary", flat, dense, @click.stop="openInNewTab(step.name)", title="搜詢", icon="search")
-        span.invisible 搜詢
-      q-btn.small(color="red", flat, dense, @click.stop="removeStep(step.id)" icon="delete", title="刪除")
-        span.invisible 刪除
-  .row(fixed-bottom-right)
+q-page
+  .row.items-center.justify-evenly
+    draggable.dragArea.list-group.w-full(v-model="steps" @change="onChange")
+      .item.flex.row.justify-between.align-center(v-for="(step, idx) in steps" :key="step.id", @click="toggleEdit(step)")
+        template(v-if="step.editing")
+          q-input.filled(:style="{'font-size': fontSizeRef + 'px'}", :autofocus="true", v-model="step.name" dense :ref="`input-${step.id}`" @blur="jumpEdit(step)" @keyup.enter="jumpEdit(step)")
+        template(v-else)
+          div(:style="{'font-size': fontSizeRef + 'px'}") {{ step.name }}
+        .filler
+        q-btn.small(color="primary",flat, dense, @click.stop="editStep(step)" icon="edit", title="編輯")
+          span.invisible 編輯
+        q-btn.small(color="secondary", flat, dense, @click.stop="openInNewTab(step.name)", title="搜詢", icon="search")
+          span.invisible 搜詢
+        q-btn.small(color="red", flat, dense, @click.stop="removeStep(step.id)" icon="delete", title="刪除")
+          span.invisible 刪除
+  .row.items-center.justify-evenly(fixed-bottom-right)
     q-btn(:style="{'font-size': fontSizeRef + 'px'}", color="green-10" @click="addNewStep" class="q-ma-md" icon="add" label="增加步驟")
     q-btn(:style="{'font-size': fontSizeRef + 'px'}", color="primary" icon="save" label="儲存" @click="savePath")
 
@@ -93,9 +94,9 @@ export default defineComponent({
       });
     };
 
-    const finishEdit = (step) => {
-      console.log('end edit!');
-      //step.editing = false; 這行不需要會過快跳出編輯模式或toggleEdit時就失去焦點，因為編輯內容"過長時"需要點選到文字段的任何一個位置開始進行編輯
+    const jumpEdit = (step) => {
+      console.log('jump edit!');
+      // step.editing = false; 這行不需要會過快跳出編輯模式或toggleEdit時就失去焦點，因為編輯內容"過長時"需要點選到文字段的任何一個位置開始進行編輯
 
       onChange();
       // 可以在這裡添加對step.name的驗證或其他邏輯
@@ -103,7 +104,7 @@ export default defineComponent({
 
     const toggleEdit = (step) => {
       if (step.editing) {
-        finishEdit(step);
+        jumpEdit(step);
       } else {
         editStep(step);
       }
@@ -171,7 +172,7 @@ export default defineComponent({
       steps,
       openInNewTab,
       editStep,
-      finishEdit,
+      jumpEdit,
       toggleEdit,
       addNewStep,
       removeLastStep,
