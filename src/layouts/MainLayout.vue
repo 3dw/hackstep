@@ -147,7 +147,10 @@ export default defineComponent({
       // 也更新組件的savedPaths狀態
       this.savedPaths = savedPaths;
 
-      alert('路徑已儲存'); // 給予使用者反饋
+      // 下載MarkDown檔案
+      this.downloadSteps();
+
+      alert('路徑已儲存，下次開啟Hackstep時會自動跳轉到該路徑'); // 給予使用者反饋
     },
     isIn(path) {
       // console.log(this.$route.path.indexOf(path) > -1);

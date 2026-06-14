@@ -30,7 +30,13 @@ export default defineComponent({
   },
   mounted() {
     // 使用編碼後的URL來處理空格等字符
-    const path = '/intro/step1%20step2%20step3';
+    let path = '/intro/step1%20step2%20step3';
+    if (localStorage.getItem('savedPaths')) {
+      const savedPaths = JSON.parse(localStorage.getItem('savedPaths') || '[]');
+      if (savedPaths.length > 0) {
+        path = savedPaths[savedPaths.length - 1].path;
+      }
+    }
     this.$router.push(path);
   },
 });
