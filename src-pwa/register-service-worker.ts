@@ -1,5 +1,26 @@
 import { register } from 'register-service-worker';
 
+let refreshing = false;
+let hasController = false;
+
+if ('serviceWorker' in navigator) {
+  hasController = Boolean(navigator.serviceWorker.controller);
+
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!hasController) {
+      hasController = true;
+      return;
+    }
+
+    if (refreshing) {
+      return;
+    }
+
+    refreshing = true;
+    window.location.reload();
+  });
+}
+
 // The ready(), registered(), cached(), updatefound() and updated()
 // events passes a ServiceWorkerRegistration instance in their arguments.
 // ServiceWorkerRegistration: https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration
@@ -15,8 +36,13 @@ register(process.env.SERVICE_WORKER_FILE, {
     // console.log('Service worker is active.')
   },
 
-  registered (/* registration */) {
+  registered (registration) {
     // console.log('Service worker has been registered.')
+    void registration.update();
+
+    setInterval(() => {
+      void registration.update();
+    }, 60 * 60 * 1000);
   },
 
   cached (/* registration */) {
@@ -27,8 +53,9 @@ register(process.env.SERVICE_WORKER_FILE, {
     // console.log('New content is downloading.')
   },
 
-  updated (/* registration */) {
+  updated (registration) {
     // console.log('New content is available; please refresh.')
+    registration.waiting?.postMessage({ type: 'SKIP_WAITING' });
   },
 
   offline () {

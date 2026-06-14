@@ -154,16 +154,14 @@ module.exports = configure(function (/* ctx */) {
 
     // https://v2.quasar.dev/quasar-cli-vite/developing-pwa/configuring-pwa
     pwa: {
-      workboxMode: 'generateSW', // or 'injectManifest'
+      workboxMode: 'injectManifest', // use custom SW so navigation can be network-first
       injectPwaMetaTags: true,
       swFilename: 'sw.js',
       manifestFilename: 'manifest.json',
       useCredentialsForManifestTag: false,
       workboxOptions: {
-        skipWaiting: true,
-        clientsClaim: true,
         maximumFileSizeToCacheInBytes: 8 * 1024 * 1024 * 10,
-      }, // only for GenerateSW
+      },
       // useFilenameHashes: true,
       // extendGenerateSWOptions (cfg) {}
       // extendInjectManifestOptions (cfg) {},
