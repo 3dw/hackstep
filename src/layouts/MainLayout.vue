@@ -241,7 +241,7 @@ export default defineComponent({
         alert('Document does not have focus, cannot copy text.');
         return;
       }
-      const copyText = 'https://hackstep.pages.dev' + this.$route.path;
+      const copyText = 'https://step.alearn.org.tw' + this.$route.path;
       navigator.clipboard
         .writeText(copyText)
         .then(() => {
